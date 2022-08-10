@@ -3,7 +3,7 @@
 Imagine we need to convert a LARGE AMOUNT of large files, CSV - Parquet for example.
 
 With only 5 files, speed was improved from 131 to 91 seconds with parallelization.
-With only 10 files, speed was improved from 314 to 199 seconds with parallelization - almost 4 minutes!
+With only 10 files, speed was improved from 314 to 199 seconds with parallelization.
 
 Increasing the number of files will result more optimization.
 

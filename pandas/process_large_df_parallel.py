@@ -1,3 +1,14 @@
+"""
+
+Imagine we need to transorm a LARGE file, 1GB CSV with 8,000,000 rows x 22 columns for example.
+
+With only 7 transformations, speed was improved from 215 to 142 seconds with parallelization.
+With only 12 transformations, speed was improved from 384 to 209 seconds with parallelization - almost half of it!
+
+Increasing the number of transformations and rows will result more optimization.
+
+"""
+
 import pandas as pd
 import numpy as np
 from concurrent.futures import ProcessPoolExecutor
