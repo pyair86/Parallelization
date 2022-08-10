@@ -29,37 +29,42 @@ files_paths = [
 
 
 def convert_csv_to_parquet(file_path):
+
     df = pd.read_csv(file_path)
     parquet_extension = ".parquet"
     df.to_parquet(file_path.split(".")[0] + parquet_extension)
 
 
 def convert_csv_to_parquet_processes():
-    start = time.time()
 
     with ProcessPoolExecutor() as executor:
-        executor.map(convert_csv_to_par, files_paths)
-
-    end = time.time()
-
-    print(f"processes time: {end - start}")
-    # with 5 files: 91 seconds
-    # with 10 files: 199 seconds
+        executor.map(convert_csv_to_parquet, files_paths)
 
 
 def convert_csv_to_parquet_no_parallelization():
-    start = time.time()
 
     for path in files_paths:
-        convert_csv_to_par(path)
+        convert_csv_to_parquet(path)
 
+
+def measure_time(function_to_measure, is_multiprocessing):
+    
+    start = time.time()
+    function_to_measure()
     end = time.time()
 
-    print(f"no parallelization time: {end - start}")
-    # with 5 files: 131 seconds
-    # with 10 files: 314 seconds
+    print_measurement(start, end, is_multiprocessing)
+    
+    
+def print_measurement(start, end, is_multiprocessing):
+
+    if is_multiprocessing:
+        print(f"processes time: {end - start}")
+    else:
+        print(f"no parallelization time: {end - start}")
 
 
 if __name__ == "__main__":
-    convert_csv_to_parquet_processes()
-    convert_csv_to_parquet_no_parallelization()
+    
+    measure_time(convert_csv_to_parquet_processes, True)
+    measure_time(convert_csv_to_parquet_no_parallelization, False)

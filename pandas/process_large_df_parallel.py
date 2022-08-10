@@ -49,42 +49,40 @@ def edit_df(df):
     return df
 
 
-def edit_df_parallel(func, n_cores):
-    start = time.time()
-
-    df_split = np.array_split(data_frame, n_cores)
-
-    with ProcessPoolExecutor(n_cores) as executor:
-        future = executor.map(func, df_split)
-
-    concat_df = pd.concat(future)
-
-    end = time.time()
-
-    print(f"processes time: {end - start}")
-    # Multiprocessing time with 12 transformations: 209 seconds
-    # Multiprocessing time with 7 transformations: 142 seconds
-
-    print(concat_df)
-
-
-def edit_df_no_parallelization():
-    start = time.time()
-
-    edited_df = edit_df(data_frame)
-
-    end = time.time()
-
-    print(f"no parallelization time: {end - start}")
-    # no parallelization time with 12 transformations: 384 seconds
-    # no parallelization time with 7 transformations: 215 seconds
-
-    print(edited_df)
-
-
-if __name__ == "__main__":
+def edit_df_parallel():
 
     physical_cpus = psutil.cpu_count(logical=False)
 
-    edit_df_parallel(edit_df, physical_cpus)
-    edit_df_no_parallelization()
+    df_split = np.array_split(data_frame, physical_cpus)
+
+    with ProcessPoolExecutor(physical_cpus) as executor:
+        future = executor.map(df_split)
+
+    concat_df = pd.concat(future)
+
+
+def edit_df_no_parallelization():
+
+    edited_df = edit_df(data_frame)
+
+
+def measure_time(function_to_measure, is_multiprocessing):
+    
+    start = time.time()
+    function_to_measure()
+    end = time.time()
+    
+    print_measurement(start, end, is_multiprocessing)
+    
+    
+def print_measurement(start, end, is_multiprocessing):
+
+    if is_multiprocessing:
+        print(f"processes time: {end - start}")
+    else:
+        print(f"no parallelization time: {end - start}")
+
+if __name__ == "__main__":
+
+    measure_time(edit_df_parallel, True)
+    measure_time(edit_df_no_parallelization, False)
