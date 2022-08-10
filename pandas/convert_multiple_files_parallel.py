@@ -12,6 +12,7 @@ Increasing the number of files will result more optimization.
 from concurrent.futures import ProcessPoolExecutor
 import time
 import pandas as pd
+import psutil
 
 # 1GB CSVs with 8,000,000 rows x 22 columns
 files_paths = [
@@ -37,7 +38,9 @@ def convert_csv_to_parquet(file_path):
 
 def convert_csv_to_parquet_processes():
 
-    with ProcessPoolExecutor() as executor:
+    physical_cpus = psutil.cpu_count(logical=False)
+
+    with ProcessPoolExecutor(physical_cpus) as executor:
         executor.map(convert_csv_to_parquet, files_paths)
 
 
