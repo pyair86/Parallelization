@@ -2,8 +2,8 @@
 
 Imagine we need to convert a LARGE AMOUNT of large files, CSV - Parquet for example.
 
-With only 5 files, speed was improved from 131 to 91 seconds with parallelization.
-With only 10 files, speed was improved from 314 to 199 seconds with parallelization.
+With 5 files, speed was improved from 131 to 91 seconds with parallelization.
+With 10 files, speed was improved from 314 to 199 seconds with parallelization.
 
 Increasing the number of files will result more optimization.
 
@@ -28,13 +28,13 @@ files_paths = [
 ]
 
 
-def convert_csv_to_par(file_path):
+def convert_csv_to_parquet(file_path):
     df = pd.read_csv(file_path)
     parquet_extension = ".parquet"
     df.to_parquet(file_path.split(".")[0] + parquet_extension)
 
 
-def convert_csv_to_par_processes():
+def convert_csv_to_parquet_processes():
     start = time.time()
 
     with ProcessPoolExecutor() as executor:
@@ -47,7 +47,7 @@ def convert_csv_to_par_processes():
     # with 10 files: 199 seconds
 
 
-def convert_csv_to_par_no_parallelization():
+def convert_csv_to_parquet_no_parallelization():
     start = time.time()
 
     for path in files_paths:
@@ -61,5 +61,5 @@ def convert_csv_to_par_no_parallelization():
 
 
 if __name__ == "__main__":
-    convert_csv_to_par_processes()
-    convert_csv_to_par_no_parallelization()
+    convert_csv_to_parquet_processes()
+    convert_csv_to_parquet_no_parallelization()

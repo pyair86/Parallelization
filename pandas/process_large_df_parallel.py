@@ -2,8 +2,8 @@
 
 Imagine we need to transorm a LARGE file, 1GB CSV with 8,000,000 rows x 22 columns for example.
 
-With only 7 transformations, speed was improved from 215 to 142 seconds with parallelization.
-With only 12 transformations, speed was improved from 384 to 209 seconds with parallelization - almost half of it!
+With 7 transformations, speed was improved from 215 to 142 seconds with parallelization.
+With 12 transformations, speed was improved from 384 to 209 seconds with parallelization - almost half of it!
 
 Increasing the number of transformations and rows will result more optimization.
 
@@ -23,8 +23,10 @@ data_frame = pd.read_csv(file_path)
 
 def edit_df(df):
 
+    eu_currency_conversion = 3.5
+
     df["EU_currency"] = df["Unit Price"].apply(
-        lambda price: round(float(price) * 3.5, 3)
+        lambda price: round(float(price) * eu_currency_conversion, 2)
     )
     df[["Ship Date", "Order Date"]] = df[["Ship Date", "Order Date"]].apply(
         lambda x: pd.to_datetime(x, errors="coerce", format="%m/%d/%Y")
