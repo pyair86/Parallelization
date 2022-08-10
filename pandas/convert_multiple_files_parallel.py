@@ -6,6 +6,7 @@ With only 5 files, speed was improved from 131 to 91 seconds with parallelizatio
 With only 10 files, speed was improved from 314 to 199 seconds with parallelization - almost 4 minutes!
 
 Increasing the number of files will result more optimization.
+
 """
 
 from concurrent.futures import ProcessPoolExecutor
