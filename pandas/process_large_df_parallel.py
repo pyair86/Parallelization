@@ -56,7 +56,7 @@ def edit_df_parallel():
     df_split = np.array_split(data_frame, physical_cpus)
 
     with ProcessPoolExecutor(physical_cpus) as executor:
-        future = executor.map(df_split)
+        future = executor.map(edit_df, df_split)
 
     concat_df = pd.concat(future)
 
@@ -81,6 +81,7 @@ def print_measurement(start, end, is_multiprocessing):
         print(f"processes time: {end - start}")
     else:
         print(f"no parallelization time: {end - start}")
+
 
 if __name__ == "__main__":
 
